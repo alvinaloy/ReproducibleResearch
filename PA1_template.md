@@ -620,7 +620,7 @@ Create a panel plot containing a time series plot of the 5-minute interval and t
 
 ```r
 library(ggplot2)
-qplot(x = interval, y = steps, data = nona.data, geom = "smooth", stat = "summary", fun.y = mean) + facet_grid(day ~ .) + facet_wrap(~ day, nrow = 2) + theme(strip.background = element_rect(fill = "#ffe5cc")) + labs(title = "Average steps by time interval, comparing between weekdays and weekends")
+qplot(x = interval, y = steps, data = nona.data, geom = "smooth", stat = "summary", fun.y = mean) + facet_grid(day ~ .) + facet_wrap(~ day, nrow = 2) + labs(title = "Average steps by time interval, comparing between weekdays and weekends")
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
