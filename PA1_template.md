@@ -603,3 +603,24 @@ tapply(nona.data$steps, nona.data$date, summary)
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##    0.00    2.49   34.10   37.40   52.80  206.00
 ```
+
+Are there differences in activity patterns between weekdays and weekends?
+-------------------------------------------------------------------------
+
+Create a new variable and find out whether each day is a weekday or weekend. Change the variable to factor.
+
+
+```r
+nona.data$day <- ifelse(weekdays(nona.data$date) %in%  c("Saturday", "Sunday"),'Weekend','Weekday')
+nona.data$day <- as.factor(nona.data$day)
+```
+
+Create a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+
+```r
+library(ggplot2)
+qplot(x = interval, y = steps, data = nona.data, geom = "smooth", stat = "summary", fun.y = mean) + facet_grid(day ~ .) + facet_wrap(~ day, nrow = 2) + theme(strip.background = element_rect(fill = "#ffe5cc")) + labs(title = "Average steps by time interval, comparing between weekdays and weekends")
+```
+
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
