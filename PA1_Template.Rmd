@@ -1,6 +1,6 @@
 Reproducible Research Peer Assignment 1
 =======================================
-  
+
 Loading and preprocessing the data
 ----------------------------------
 
@@ -35,16 +35,48 @@ What is the average daily activity pattern?
 Calculate the average number of steps by time interval, then plot the graph.
 
 ```{r}
-total.steps.int <- tapply(data$steps, data$interval, mean, na.rm = TRUE)
-plot(total.steps.int, type = "l", main = "Average number of steps by time interval", col = "magenta")
+avg.steps.int <- tapply(data$steps, data$interval, mean, na.rm = TRUE)
+plot(avg.steps.int, type = "l", main = "Average number of steps by time interval", col = "magenta")
 ```
 
-To find the 5-minute interval, on average across all the days in the dataset, that contains the maximum number of steps.
+Finding the 5-minute interval, on average across all the days in the dataset, that contains the maximum number of steps.
 
 ```{r}
-total.steps.int[which.max(total.steps.int)]
+avg.steps.int[which.max(avg.steps.int)]
 ```
 
-Imputing missing values
+Inputing missing values
 -----------------------
 
+Find the observations with no NA, inverse it logically, then add up the number of logical '1's (TRUE). This will be the number of cases that has NA values.
+
+```{r}
+sum(!complete.cases(data))
+```
+
+To fill the NA values, since the NA values are for entire days, filling it with the mean for that day impossible. Thus to fill it in with mean values for that time interval.
+
+Creating a new dataset with the NA values filled in.
+
+```{r}
+nona.data <- data
+for(i in 1:nrow(data)) {
+        if(is.na(data[i,1])) {
+                nona.data[i, 1] <- avg.steps.int[[as.character(data[i, 3])]]
+        }
+}
+```
+
+With the NA values filled in, calculate the total number of steps for each day, then plot the graph.
+
+```{r}
+nona.total.steps.daily <- aggregate(steps ~ date, data = nona.data, sum, na.rm = TRUE)
+plot(nona.total.steps.daily, type = "h", main = "Total number of steps taken each day(NA filled in)", col = "magenta")
+```
+
+With the NA values filled in, calculate the mean and median total number of steps taken per day.  
+Note: For days where all the data is NA, it will return NA for both mean and median.
+
+```{r}
+tapply(nona.data$steps, nona.data$date, summary)
+```
